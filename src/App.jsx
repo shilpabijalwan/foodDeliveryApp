@@ -1,15 +1,8 @@
-import { useState } from "react";
-import { Box, Text } from "@chakra-ui/react"; // adding linear gradient and
-import LayOut from "./LayOut/LayOut";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./Routers/Routers";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <>
-      <LayOut />
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
