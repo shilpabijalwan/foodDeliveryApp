@@ -8,7 +8,6 @@ import SerachBar from "../SerachBar/SerachBar";
 
 const Links = [
   { title: "", link: "/", icon: "" },
-
   { title: "Offer", link: "/offer", icon: "" },
   { title: "Help", link: "/help", icon: "" },
   { title: "Sign In", link: "/signin", icon: <CiUser size={24} /> },
@@ -17,6 +16,10 @@ const Links = [
     link: "/cart",
     icon: <CiShoppingCart size={24} />,
     count: "",
+  },
+  {
+    title: "Admin",
+    link: "/admin",
   },
 ];
 

@@ -23,7 +23,7 @@ function MyLocation() {
     }
   }, []);
   const getCurrentLocation = () => {
-    const fetchlocation = async () => {
+    (async () => {
       try {
         await axios
           .get(
@@ -31,15 +31,14 @@ function MyLocation() {
           )
           .then((res) => {
             // console.log(res.data.address);
-            setUserLoaction(res.data.address.town);
+            setUserLoaction(res.data.address.city);
             setUserCode(res.data.address.postcode);
           });
       } catch (error) {
         console.error("Error fetching address:", error);
         setUserLoaction("");
       }
-    };
-    fetchlocation();
+    })();
   };
 
   return (
