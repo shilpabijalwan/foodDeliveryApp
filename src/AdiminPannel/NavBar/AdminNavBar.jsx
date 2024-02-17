@@ -17,10 +17,6 @@ const Links = [
     title: "Add Category",
     link: "/add-category",
   },
-  {
-    title: "Update Product",
-    link: "/update",
-  },
 ];
 
 function AdminNavbar() {

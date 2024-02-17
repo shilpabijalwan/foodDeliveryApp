@@ -14,11 +14,13 @@ import AddProducts from "../AdiminPannel/AdminPages/AddProducts";
 
 import ProductsPage from "../Pages/ProductsPage";
 import AddCategory from "../AdiminPannel/AdminPages/AddCategory";
+import UpdateProduct from "../AdiminPannel/UpDatePage/UpdateProduct";
+import ErrorPage from "../Pages/ErrorPage";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<LayOut />}>
+      <Route path="/" element={<LayOut />} errorElement={<ErrorPage />}>
         <Route path="" element={<HomePage />} />
         <Route path="signin" element={<Login />} />
         <Route path="signup" element={<Signup />} />
@@ -29,6 +31,7 @@ export const router = createBrowserRouter(
       <Route path="admin" element={<Home />} />
       <Route path="add" element={<AddProducts />} />
       <Route path="add-category" element={<AddCategory />} />
+      <Route path="update/:id" element={<UpdateProduct />} />
       {/* </Route> */}
     </>
   )

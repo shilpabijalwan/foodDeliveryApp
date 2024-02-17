@@ -7,11 +7,55 @@ import {
   Image,
   Stack,
   Text,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
+} from "@chakra-ui/react";
+import axios from "axios";
 
-function ProductCard({ category, price, name, image }) {
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
+function ProductCard({ category, price, name, image, id }) {
+  const dispatch = useDispatch();
+  // const storeProduct = useSelector((data) => {
+  //   return data.ProductSlice;
+  // });
+  // const { ProductData, isLoading, isError } = storeProduct;
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = useRef();
+  const toast = useToast();
+
+  const handleDelete = async (id) => {
+    // console.log(id);
+    onClose();
+
+    try {
+      await axios
+        .delete(`http://192.168.1.21:8000/api/products/${id}/delete`)
+        .then((response) => {
+          // console.log(response);
+          toast({
+            title: "Product deleted",
+            status: "success",
+            duration: 3000,
+          });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Card maxW="sm">
       <CardBody>
@@ -38,14 +82,42 @@ function ProductCard({ category, price, name, image }) {
           // border={"1px solid blue"}
           w={"90%"}
           justifyContent={"space-around"}>
-          <Button variant="solid" colorScheme="blue" px={10}>
-            Edit
-          </Button>
-          <Button variant="solid" colorScheme="red" px={10}>
+          <Link to={`/update/${id}`}>
+            <Button variant="solid" colorScheme="blue" px={10}>
+              Edit
+            </Button>
+          </Link>
+          <Button variant="solid" colorScheme="red" px={10} onClick={onOpen}>
             Delete
           </Button>
         </ButtonGroup>
       </CardFooter>
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}>
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Delete Product
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Are you sure? You can't undo this action afterwards.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                Cancel
+              </Button>
+
+              <Button colorScheme="red" onClick={() => handleDelete(id)} ml={3}>
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Card>
   );
 }

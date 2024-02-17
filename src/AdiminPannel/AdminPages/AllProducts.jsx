@@ -8,6 +8,7 @@ import {
 } from "../../redux/Slices/Product.slice";
 import { Box } from "@chakra-ui/react";
 import ProductCard from "../ProductCard/ProductCard";
+import Loader from "../../Components/Spinner/Spinner";
 
 function AllProducts() {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ function AllProducts() {
         await axios
           .get("http://192.168.1.21:8000/api/products/getProducts")
           .then((res) => {
-            console.log(res.data.product);
+            // console.log(res.data.product);
             dispatch(GetProducts(res.data.product));
           });
       } catch (error) {
@@ -34,10 +35,12 @@ function AllProducts() {
     })();
   }, []);
 
-  return (
-    <Box w={"80%"} m={"auto"} mt={30}>
+  return isLoading ? (
+    <Loader />
+  ) : (
+    <Box w={"90%"} m={"auto"} mt={30}>
       {/* All Products */}
-      <Box display={"grid"} gridTemplateColumns="repeat(3, 1fr)" gap={20}>
+      <Box display={"grid"} gridTemplateColumns="repeat(4, 1fr)" gap={10}>
         {ProductData?.map((ele) => (
           <ProductCard {...ele} key={ele.id} />
         ))}
