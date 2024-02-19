@@ -25,13 +25,11 @@ import axios from "axios";
 
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { fetchAdminProducts } from "../../Services/ProductServices";
 
 function ProductCard({ category, price, name, image, id }) {
   const dispatch = useDispatch();
-  // const storeProduct = useSelector((data) => {
-  //   return data.ProductSlice;
-  // });
-  // const { ProductData, isLoading, isError } = storeProduct;
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
   const toast = useToast();
@@ -42,20 +40,20 @@ function ProductCard({ category, price, name, image, id }) {
 
     try {
       await axios
-        .delete(`http://192.168.1.21:8000/api/products/${id}/delete`)
+        .delete(`http://192.168.1.18:8000/api/products/delete/${id}`)
         .then((response) => {
           // console.log(response);
           toast({
             title: "Product deleted",
             status: "success",
-            duration: 3000,
+            duration: 4000,
           });
         });
+      fetchAdminProducts();
     } catch (error) {
       console.log(error);
     }
   };
-
   return (
     <Card maxW="sm">
       <CardBody>

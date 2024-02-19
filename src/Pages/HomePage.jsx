@@ -1,43 +1,46 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
-import axios from "axios";
-
+import { useSelector } from "react-redux";
 import { Box } from "@chakra-ui/react";
-
 import Loader from "../Components/Spinner/Spinner";
 import CategoryCard from "../Components/CategoryCard/CategoryCard";
-import {
-  CategoryIsError,
-  CategoryIsLoading,
-  GetCategory,
-} from "../redux/Slices/Category.Slice";
+import { FetchUserCategory } from "../Services/CategoryService";
+import { BASE_URL } from "../../../ipData";
+import axios from "axios";
 
 function HomePage() {
-  const dispatch = useDispatch();
   const categoryStore = useSelector((data) => {
     return data.CategorySlice;
   });
   // console.log(categoryStore);
 
   const { CategoryData, isError, isLoading } = categoryStore;
-  // console.log(CategoryData, isError, isLoading);
+  // console.log(CategoryData, isError, isLoading);\
+
+  const authStore = useSelector((data) => {
+    return data.AuthSlice;
+  });
+  const token = JSON.parse(localStorage.getItem("token")) || null;
+
+  const fetchUser = async () => {
+    try {
+      axios
+        .get(`${BASE_URL}/user`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          // console.log(response);
+          localStorage.setItem("userDetails", JSON.stringify(response.data));
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    (async () => {
-      dispatch(CategoryIsLoading());
-      try {
-        await axios
-          .get("http://192.168.1.21:8000/api/categories/getCategories")
-          .then((response) => {
-            // console.log(response);
-            dispatch(GetCategory(response.data.category));
-          });
-      } catch (error) {
-        console.log(error);
-        dispatch(CategoryIsError(error));
-      }
-    })();
+    FetchUserCategory();
+    fetchUser();
   }, []);
 
   return isLoading ? (

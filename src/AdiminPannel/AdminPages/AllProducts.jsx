@@ -24,7 +24,7 @@ function AllProducts() {
     (async () => {
       try {
         await axios
-          .get("http://192.168.1.21:8000/api/products/getProducts")
+          .get("http://192.168.1.18:8000/api/products/getProducts")
           .then((res) => {
             // console.log(res.data.product);
             dispatch(GetProducts(res.data.product));

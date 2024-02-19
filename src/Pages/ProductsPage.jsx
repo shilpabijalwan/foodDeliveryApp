@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import { Box, Image, Text } from "@chakra-ui/react";
 import UserProductCard from "../Components/UserProductCard/UserProductCard";
 import Loader from "../Components/Spinner/Spinner";
+import { fetchAdminProducts } from "../Services/ProductServices";
 
 function ProductsPage() {
   const [filteredData, setfilteredData] = useState(null);
@@ -24,22 +25,9 @@ function ProductsPage() {
   });
 
   const { ProductData, isLoading, isError } = storeData;
-  // console.log(ProductData);
 
   useEffect(() => {
-    dispatch(ProductIsLoading());
-    (async () => {
-      try {
-        await axios
-          .get("http://192.168.1.21:8000/api/products/getProducts")
-          .then((res) => {
-            // console.log(res.data.product);
-            dispatch(GetProducts(res.data.product));
-          });
-      } catch (error) {
-        dispatch(ProductIsError(error));
-      }
-    })();
+    fetchAdminProducts();
   }, []);
 
   useEffect(() => {
@@ -50,8 +38,7 @@ function ProductsPage() {
       }
     });
     setfilteredData(newData);
-    // console.log(newData);
-  }, [filteredData]);
+  }, [ProductData]);
 
   return isLoading ? (
     <Loader />

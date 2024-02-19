@@ -40,7 +40,7 @@ function Signup() {
 
     try {
       await axios
-        .post("http://192.168.1.21:8000/api/users/register", data, {
+        .post("http://192.168.1.18:8000/api/users/register", data, {
           headers: {
             "Content-Type": "application/json",
           },

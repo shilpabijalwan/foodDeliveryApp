@@ -31,7 +31,7 @@ function UpdateProduct() {
   const stroeCategory = useSelector((data) => {
     return data.CategorySlice.CategoryData;
   });
-
+  const toast = useToast();
   const [productdata, setProductdata] = useState({
     name: "",
     price: null,
@@ -43,7 +43,7 @@ function UpdateProduct() {
     (async () => {
       try {
         await axios
-          .get("http://192.168.1.21:8000/api/products/getProducts")
+          .get("http://192.168.1.18:8000/api/products/getProducts")
           .then((res) => {
             // console.log(res.data.product);
             const filteredData = res.data.product?.filter((ele) => {
@@ -68,19 +68,19 @@ function UpdateProduct() {
   const handleUpdate = async (data) => {
     console.log("working");
     console.log(data);
-    const image = data.image.length ? data.image[0] : "";
+    // const image = data.image.length ? data.image[0] : "";
     const formData = {
       name: data.name,
       price: data.price,
-      image: image,
+      image: data.image[0],
       category: data.catagoryselect,
     };
 
     console.log(formData);
 
     try {
-      const res = await axios.patch(
-        `http://192.168.1.21:8000/api/products/${id}`,
+      const res = await axios.post(
+        `http://192.168.1.18:8000/api/products/update/${id}`,
         formData,
         {
           headers: {
@@ -88,6 +88,14 @@ function UpdateProduct() {
           },
         }
       );
+      {
+        res.status &&
+          toast({
+            title: "product successfully updated",
+            status: "success",
+            duration: 3000,
+          });
+      }
       console.log(res);
     } catch (error) {
       console.log(error);

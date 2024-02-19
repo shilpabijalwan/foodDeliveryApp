@@ -9,6 +9,7 @@ import {
   CategoryIsLoading,
   GetCategory,
 } from "../../redux/Slices/AdminCategory.slice";
+import { BASE_URL } from "../../../../ipData";
 
 const Links = [
   { title: "Products", link: "/admin", icon: "" },
@@ -26,7 +27,7 @@ function AdminNavbar() {
       dispatch(CategoryIsLoading());
       try {
         await axios
-          .get("http://192.168.1.21:8000/api/categories/getCategories")
+          .get(`${BASE_URL}/categories/getCategories`)
           .then((response) => {
             // console.log(response);
             dispatch(GetCategory(response.data.category));

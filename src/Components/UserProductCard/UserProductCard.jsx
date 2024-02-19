@@ -10,7 +10,11 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
-export default function UserProductCard({ image, name, price }) {
+
+export default function UserProductCard({ image, name, price, id }) {
+  const handleAdd = (id) => {
+    console.log(id);
+  };
   return (
     <Card maxW="sm">
       <CardBody>
@@ -33,6 +37,7 @@ export default function UserProductCard({ image, name, price }) {
       <Divider />
       <CardFooter>
         <Button
+          onClick={() => handleAdd(id)}
           variant="solid"
           colorScheme="blue"
           textAlign={"center"}

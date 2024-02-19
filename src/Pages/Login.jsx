@@ -7,13 +7,19 @@ import {
   Stack,
   Text,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
+import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { userData } from "../redux/Slices/Auth.slice";
 
 function Login() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const toast = useToast();
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const {
@@ -26,8 +32,39 @@ function Login() {
 
   const handleLogin = async (data) => {
     console.log("working");
-    // console.log(inputFieldValues);
-    reset();
+    console.log(data);
+    try {
+      const response = await axios.post(
+        "http://192.168.1.18:8000/api/users/login",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      // console.log(response.data.token);
+      localStorage.setItem("token", JSON.stringify(response.data.token));
+      dispatch(userData(response.data.token));
+
+      response.data.token &&
+        toast({
+          title: "Login successful",
+          status: "success",
+          duration: 3000,
+        });
+      setTimeout(() => {
+        response && navigate("/");
+      }, 2000);
+    } catch (error) {
+      // console.log(error.response.data.error);
+      toast({
+        title: error.response.data.error,
+        status: "error",
+        duration: 3000,
+      });
+    }
+    // reset();
   };
 
   return (

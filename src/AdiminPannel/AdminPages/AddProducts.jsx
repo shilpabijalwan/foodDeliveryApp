@@ -42,7 +42,7 @@ function AddProducts() {
 
     try {
       const response = await axios.post(
-        "http://192.168.1.21:8000/api/products/add",
+        "http://192.168.1.18:8000/api/products/add",
         formData,
         {
           headers: {

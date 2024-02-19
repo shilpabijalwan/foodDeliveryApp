@@ -39,7 +39,7 @@ function AddCategory() {
 
     try {
       const response = await axios.post(
-        "http://192.168.1.21:8000/api/categories/add",
+        "http://192.168.1.14:8000/api/categories/add",
         formdata,
         {
           headers: {

@@ -1,6 +1,21 @@
-import { Box, HStack, Text } from "@chakra-ui/react";
-import React from "react";
-import { NavLink } from "react-router-dom";
+import {
+  Box,
+  HStack,
+  Image,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Text,
+  Button,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider,
+} from "@chakra-ui/react";
+
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import { Link, NavLink, Navigate, useNavigate } from "react-router-dom";
 import { CiUser, CiShoppingCart } from "react-icons/ci";
 import MyLocation from "../Location/MyLocation";
 import { color } from "framer-motion";
@@ -10,7 +25,7 @@ const Links = [
   { title: "", link: "/", icon: "" },
   { title: "Offer", link: "/offer", icon: "" },
   { title: "Help", link: "/help", icon: "" },
-  { title: "Sign In", link: "/signin", icon: <CiUser size={24} /> },
+  // { title: "Sign In", link: "/signin", icon: <CiUser size={24} /> },
   {
     title: "Cart",
     link: "/cart",
@@ -24,6 +39,11 @@ const Links = [
 ];
 
 function NavBar() {
+  const LoginUser = JSON.parse(localStorage.getItem("userDetails")) || "";
+  const token = JSON.parse(localStorage.getItem("token")) || null;
+  const navigate = useNavigate();
+  // console.log(LoginUser);
+
   return (
     <HStack
       w={"100%"}
@@ -49,7 +69,7 @@ function NavBar() {
 
       <HStack
         // border={"1px solid blue"}
-        w={{ base: "70%", sm: "70%", md: "40%" }}
+        w={{ base: "70%", sm: "70%", md: "48%" }}
         justifyContent={"space-around"}>
         <Box>
           <SerachBar />
@@ -82,6 +102,39 @@ function NavBar() {
             </NavLink>
           </Box>
         ))}
+        <Menu closeOnSelect={true}>
+          <MenuButton as={Button} colorScheme="pink">
+            Profile
+          </MenuButton>
+          <MenuList>
+            <MenuGroup>
+              {token ? (
+                <MenuItem fontSize={18} fontWeight={"bold"} color={"#8A56D5"}>
+                  Hello {LoginUser?.name.toUpperCase()}
+                </MenuItem>
+              ) : (
+                <MenuItem fontSize={18} fontWeight={"bold"} w={"100%"}>
+                  <Link to="/signin">
+                    <Button
+                      colorScheme="red"
+                      variant="outline"
+                      w={"90%"}
+                      m={"auto"}
+                      px={16}>
+                      Login/SignUp
+                    </Button>
+                  </Link>
+                </MenuItem>
+              )}
+              <MenuItem>Orders</MenuItem>
+            </MenuGroup>
+            <MenuDivider />
+            <MenuGroup title="Help">
+              <MenuItem>Docs</MenuItem>
+              <MenuItem>FAQ</MenuItem>
+            </MenuGroup>
+          </MenuList>
+        </Menu>
       </HStack>
     </HStack>
   );
