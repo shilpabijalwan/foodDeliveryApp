@@ -12,11 +12,16 @@ import {
 import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { apiAxios } from "../../axiosApi";
 
-function AdminSignup() {
-  const toast = useToast();
+// import { axiosToken } from "../axiosApi";
+
+function AdminLogin() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toast = useToast();
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const {
@@ -27,55 +32,36 @@ function AdminSignup() {
     reset,
   } = useForm();
 
-  // const inputFieldValues = watch({
-  //   name: "FullName",
-  //   email: "email",
-  //   password: "password",
-  // });
-
   const handleLogin = async (data) => {
-    console.log(data);
-    // console.log("working");
-    // console.log(inputFieldValues);
-
     try {
-      await axios
-        .post("http://192.168.1.22:8000/api/users/register", data, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+      const response = await apiAxios.post("/admins/login", data);
 
-        .then((response) => {
-          console.log(response.data);
-          toast({
-            title: response.data,
-            status: "success",
-            duration: 2000,
-          });
-          setTimeout(() => {
-            response && navigate("/");
-          }, 2000);
+      localStorage.setItem("token", JSON.stringify(response.data.token));
+
+      response.data.token &&
+        toast({
+          title: "Login successful",
+          status: "success",
+          duration: 3000,
         });
+      setTimeout(() => {
+        response && navigate("/admin");
+      }, 1000);
     } catch (error) {
-      console.log(error.response.data.errors);
+      console.log(error);
       toast({
-        title: error.response.data.errors.email,
+        title: error.response.data.error,
         status: "error",
-        duration: 6000,
+        duration: 3000,
       });
     }
-
-    reset();
+    // reset();
   };
 
   return (
-    <Box
-      w={"100%"}
-      // border="1px solid blue"
-    >
+    <Box w={"100%"}>
       <VStack
-        w={{ base: "70%", sm: "70%", md: "45%" }}
+        w={{ base: "70%", sm: "70%", md: "50%" }}
         m={"auto"}
         h={"600px"}
         // border={"1px solid blue"}
@@ -87,37 +73,37 @@ function AdminSignup() {
         <Box
           px={10}
           py={30}
-          my={3}
+          my={10}
           // border="1px solid blue"
-          fontSize="4xl"
+          fontSize="2xl"
           fontFamily={"cursive"}
           fontWeight={"bold"}>
           <Text
-            fontSize="5xl"
+            fontSize="6xl"
             bgGradient="linear(to-l, #7928CA, #FF0080)"
             bgClip={"text"}
             fontWeight="extrabold">
-            Hi!
+            Hi Admin!
           </Text>
           <Text
+            fontSize="4xl"
             bgGradient="linear(to-l, #7928CA, #FF0080)"
             bgClip={"text"}
             fontWeight="extrabold">
-            SIGN UP YOUR ACCOUNT
+            LOG IN YOUR ACCOUNT
+          </Text>
+          <Text fontSize={"2xl"}>
+            Don&apos;t have any account ?&nbsp;
+            <Link to="/adminsignup" style={{ color: "blue" }}>
+              Sign Up
+            </Link>
           </Text>
         </Box>
         <form onSubmit={handleSubmit(handleLogin)} style={{ width: "50%" }}>
           <Stack spacing={10}>
             <Input
               variant="filled"
-              placeholder="Enter your full Name"
-              type="text"
-              {...register("name", { required: true })}
-              // onChange={(e) => console.log(e.target.value)}
-            />
-            <Input
-              variant="filled"
-              placeholder="Enter your email"
+              placeholder="email"
               type="email"
               {...register("email", {
                 required: true,
@@ -128,12 +114,13 @@ function AdminSignup() {
                     ) || "Email address must be valid address",
                 },
               })}
+              // onChange={(e) => console.log(e.target.value)}
             />
             <InputGroup size="md">
               <Input
                 variant="filled"
+                placeholder="password"
                 type={show ? "text" : "password"}
-                placeholder="Enter your password"
                 {...register("password", { required: true })}
                 // onChange={(e) => console.log(e.target.value)}
               />
@@ -144,7 +131,7 @@ function AdminSignup() {
               </InputRightElement>
             </InputGroup>
             <Button type="submit" colorScheme="teal" variant="outline">
-              Sign Up
+              Log In
             </Button>
           </Stack>
         </form>
@@ -153,4 +140,4 @@ function AdminSignup() {
   );
 }
 
-export default AdminSignup;
+export default AdminLogin;

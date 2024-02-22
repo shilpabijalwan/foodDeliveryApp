@@ -23,37 +23,37 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchAdminProducts } from "../../Services/ProductServices";
+import { FetchUserCategory } from "../../Services/CategoryService";
+import { apiAxios } from "../../axiosApi";
 
 function ProductCard({ category, price, name, image, id }) {
-  const dispatch = useDispatch();
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
   const toast = useToast();
 
   const handleDelete = async (id) => {
-    // console.log(id);
     onClose();
-
     try {
-      await axios
-        .delete(`http://192.168.1.18:8000/api/products/delete/${id}`)
-        .then((response) => {
-          // console.log(response);
+      await apiAxios.delete(`/products/delete/${id}`).then((response) => {
+        response &&
           toast({
             title: "Product deleted",
             status: "success",
             duration: 4000,
           });
-        });
+      });
+
       fetchAdminProducts();
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    FetchUserCategory();
+  });
   return (
     <Card maxW="sm">
       <CardBody>

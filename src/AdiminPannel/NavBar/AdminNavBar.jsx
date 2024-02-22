@@ -2,17 +2,15 @@ import { Box, HStack, Text } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
 import axios from "axios";
-import {
-  CategoryIsError,
-  CategoryIsLoading,
-  GetCategory,
-} from "../../redux/Slices/AdminCategory.slice";
+
 import { BASE_URL } from "../../../../ipData";
+import Loader from "../../Components/Spinner/Spinner";
 
 const Links = [
-  { title: "Products", link: "/admin", icon: "" },
+  { title: "Products", link: "/", icon: "" },
+
+  { title: "Categories", link: "/category", icon: "" },
   { title: "Add Product", link: "/add" },
   {
     title: "Add Category",
@@ -21,22 +19,30 @@ const Links = [
 ];
 
 function AdminNavbar() {
-  const dispatch = useDispatch();
+  const token = JSON.parse(localStorage.getItem("token")) || null;
+  const AdminDetails = JSON.parse(localStorage.getItem("AdminDetails")) || "";
+
   useEffect(() => {
-    (async () => {
-      dispatch(CategoryIsLoading());
-      try {
-        await axios
-          .get(`${BASE_URL}/categories/getCategories`)
-          .then((response) => {
-            // console.log(response);
-            dispatch(GetCategory(response.data.category));
-          });
-      } catch (error) {
-        console.log(error);
-        dispatch(CategoryIsError(error));
-      }
-    })();
+    token &&
+      (async () => {
+        try {
+          await axios
+            .get(`${BASE_URL}/admin`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then((response) => {
+              // console.log(response);
+              localStorage.setItem(
+                "AdminDetails",
+                JSON.stringify(response.data)
+              );
+            });
+        } catch (error) {
+          console.log(error);
+        }
+      })();
   }, []);
 
   return (
@@ -80,7 +86,7 @@ function AdminNavbar() {
             </NavLink>
           </Box>
         ))}
-        <Text>Admin Name</Text>
+        <Text>{AdminDetails.name}</Text>
       </HStack>
     </HStack>
   );

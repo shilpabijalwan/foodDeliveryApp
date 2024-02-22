@@ -6,7 +6,7 @@ import { Box } from "@chakra-ui/react";
 
 function LayOut() {
   return (
-    <Box border="1px solid blue">
+    <Box>
       <NavBar />
       <Outlet />
       <Footer />

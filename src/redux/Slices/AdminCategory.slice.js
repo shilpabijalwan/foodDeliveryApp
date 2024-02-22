@@ -18,7 +18,7 @@ const AdminCategorySlice = createSlice({
     },
     CategoryIsError: (state, action) => {
       state.isLoading = false;
-      state.isError = action.payload;
+      // state.isError = action.payload;
     },
   },
 });

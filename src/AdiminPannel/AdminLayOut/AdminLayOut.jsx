@@ -1,15 +1,17 @@
 import React from "react";
 
+import { Outlet } from "react-router-dom";
+
 import { Box } from "@chakra-ui/react";
 import AdminNavbar from "../NavBar/AdminNavBar";
-import AllProducts from "../AdminPages/AllProducts";
 
-function Home() {
+function AdminLayOut() {
   return (
     <Box>
-      <AllProducts />
+      <AdminNavbar />
+      <Outlet />
     </Box>
   );
 }
 
-export default Home;
+export default AdminLayOut;

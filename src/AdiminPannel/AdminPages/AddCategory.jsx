@@ -14,6 +14,7 @@ import {
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { apiAxios, multipartApi } from "../../axiosApi";
 function AddCategory() {
   const toast = useToast();
 
@@ -38,17 +39,8 @@ function AddCategory() {
     };
 
     try {
-      const response = await axios.post(
-        "http://192.168.1.14:8000/api/categories/add",
-        formdata,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      console.log(response);
+      const response = await multipartApi.post("/categories/add", formdata);
+      // console.log(response);
 
       {
         response.status &&
@@ -65,7 +57,6 @@ function AddCategory() {
   };
   return (
     <Box>
-      <AdminNavbar />
       <Box
         w={"100%"}
         // border="1px solid blue"

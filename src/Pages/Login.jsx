@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { userData } from "../redux/Slices/Auth.slice";
+import { apiAxios, axiosToken } from "../axiosApi";
 
 function Login() {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ function Login() {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
+
     reset,
   } = useForm();
 
@@ -34,18 +35,10 @@ function Login() {
     console.log("working");
     console.log(data);
     try {
-      const response = await axios.post(
-        "http://192.168.1.18:8000/api/users/login",
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await apiAxios.post("/users/login", data);
       // console.log(response.data.token);
       localStorage.setItem("token", JSON.stringify(response.data.token));
-      dispatch(userData(response.data.token));
+      // dispatch(userData(response.data.token));
 
       response.data.token &&
         toast({

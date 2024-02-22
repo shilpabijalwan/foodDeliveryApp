@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Navigate, useNavigate } from "react-router-dom";
 
-function AdminSignup() {
+function Signup() {
   const toast = useToast();
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
@@ -23,15 +23,8 @@ function AdminSignup() {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
     reset,
   } = useForm();
-
-  // const inputFieldValues = watch({
-  //   name: "FullName",
-  //   email: "email",
-  //   password: "password",
-  // });
 
   const handleLogin = async (data) => {
     console.log(data);
@@ -40,7 +33,7 @@ function AdminSignup() {
 
     try {
       await axios
-        .post("http://192.168.1.22:8000/api/users/register", data, {
+        .post("http://192.168.1.18:8000/api/admins/register", data, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -54,7 +47,7 @@ function AdminSignup() {
             duration: 2000,
           });
           setTimeout(() => {
-            response && navigate("/");
+            response && navigate("/adminlogin");
           }, 2000);
         });
     } catch (error) {
@@ -85,25 +78,18 @@ function AdminSignup() {
         }}
         my={50}>
         <Box
-          px={10}
+          px={100}
           py={30}
-          my={3}
+          my={10}
           // border="1px solid blue"
           fontSize="4xl"
           fontFamily={"cursive"}
           fontWeight={"bold"}>
           <Text
-            fontSize="5xl"
             bgGradient="linear(to-l, #7928CA, #FF0080)"
             bgClip={"text"}
             fontWeight="extrabold">
-            Hi!
-          </Text>
-          <Text
-            bgGradient="linear(to-l, #7928CA, #FF0080)"
-            bgClip={"text"}
-            fontWeight="extrabold">
-            SIGN UP YOUR ACCOUNT
+            SIGN IN YOUR ACCOUNT
           </Text>
         </Box>
         <form onSubmit={handleSubmit(handleLogin)} style={{ width: "50%" }}>
@@ -144,7 +130,7 @@ function AdminSignup() {
               </InputRightElement>
             </InputGroup>
             <Button type="submit" colorScheme="teal" variant="outline">
-              Sign Up
+              Sign In
             </Button>
           </Stack>
         </form>
@@ -153,4 +139,4 @@ function AdminSignup() {
   );
 }
 
-export default AdminSignup;
+export default Signup;

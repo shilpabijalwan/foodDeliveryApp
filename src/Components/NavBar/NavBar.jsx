@@ -12,37 +12,52 @@ import {
   MenuGroup,
   MenuOptionGroup,
   MenuDivider,
+  useToast,
 } from "@chakra-ui/react";
 
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Link, NavLink, Navigate, useNavigate } from "react-router-dom";
 import { CiUser, CiShoppingCart } from "react-icons/ci";
-import MyLocation from "../Location/MyLocation";
+// import MyLocation from "../Location/MyLocation";
 import { color } from "framer-motion";
 import SerachBar from "../SerachBar/SerachBar";
+import axios from "axios";
+import { BASE_URL } from "../../../../ipData";
+import { axiosToken } from "../../axiosApi";
 
 const Links = [
   { title: "", link: "/", icon: "" },
-  { title: "Offer", link: "/offer", icon: "" },
-  { title: "Help", link: "/help", icon: "" },
-  // { title: "Sign In", link: "/signin", icon: <CiUser size={24} /> },
   {
     title: "Cart",
     link: "/cart",
     icon: <CiShoppingCart size={24} />,
     count: "",
   },
-  {
-    title: "Admin",
-    link: "/admin",
-  },
 ];
 
 function NavBar() {
+  const toast = useToast();
   const LoginUser = JSON.parse(localStorage.getItem("userDetails")) || "";
   const token = JSON.parse(localStorage.getItem("token")) || null;
-  const navigate = useNavigate();
-  // console.log(LoginUser);
+
+  const handleLogOut = async () => {
+    try {
+      await axiosToken.post(`/user/logout`).then((response) => {
+        console.log(response);
+        response
+          ? localStorage.removeItem("token") &&
+            localStorage.removeItem("userDetails")
+          : "";
+        response &&
+          toast({
+            title: response.data,
+            status: "success",
+            duration: 3000,
+          });
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <HStack
@@ -64,7 +79,7 @@ function NavBar() {
             // width={"100%"}
           />
         </Box>
-        <MyLocation />
+        {/* <MyLocation /> */}
       </HStack>
 
       <HStack
@@ -103,14 +118,14 @@ function NavBar() {
           </Box>
         ))}
         <Menu closeOnSelect={true}>
-          <MenuButton as={Button} colorScheme="pink">
-            Profile
+          <MenuButton as={Button} colorScheme="red">
+            <CiUser size={24} color="white" />
           </MenuButton>
           <MenuList>
             <MenuGroup>
               {token ? (
                 <MenuItem fontSize={18} fontWeight={"bold"} color={"#8A56D5"}>
-                  Hello {LoginUser?.name.toUpperCase()}
+                  Hello {LoginUser?.name}
                 </MenuItem>
               ) : (
                 <MenuItem fontSize={18} fontWeight={"bold"} w={"100%"}>
@@ -131,7 +146,19 @@ function NavBar() {
             <MenuDivider />
             <MenuGroup title="Help">
               <MenuItem>Docs</MenuItem>
-              <MenuItem>FAQ</MenuItem>
+              {/* <MenuItem> */}
+              {token && (
+                <Button
+                  onClick={handleLogOut}
+                  w={"80%"}
+                  my={2}
+                  colorScheme="red"
+                  variant="outline"
+                  ml={5}>
+                  Logout
+                </Button>
+              )}
+              {/* </MenuItem> */}
             </MenuGroup>
           </MenuList>
         </Menu>

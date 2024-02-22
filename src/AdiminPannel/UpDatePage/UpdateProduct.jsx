@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { apiAxios, multipartApi } from "../../axiosApi";
 
 function UpdateProduct() {
   const [previmg, setPrevimg] = useState(null);
@@ -42,23 +43,21 @@ function UpdateProduct() {
   useEffect(() => {
     (async () => {
       try {
-        await axios
-          .get("http://192.168.1.18:8000/api/products/getProducts")
-          .then((res) => {
-            // console.log(res.data.product);
-            const filteredData = res.data.product?.filter((ele) => {
-              return ele.id == id;
-            });
-            filteredData?.map((ele) => {
-              //   console.log(ele);
-              setProductdata({
-                name: ele.name,
-                price: ele.price,
-                image: ele.image,
-                category: ele.category_id,
-              });
+        await apiAxios.get("/products/getProducts").then((res) => {
+          // console.log(res.data.product);
+          const filteredData = res.data.product?.filter((ele) => {
+            return ele.id == id;
+          });
+          filteredData?.map((ele) => {
+            //   console.log(ele);
+            setProductdata({
+              name: ele.name,
+              price: ele.price,
+              image: ele.image,
+              category: ele.category_id,
             });
           });
+        });
       } catch (error) {
         console.log(error);
       }
@@ -79,15 +78,7 @@ function UpdateProduct() {
     console.log(formData);
 
     try {
-      const res = await axios.post(
-        `http://192.168.1.18:8000/api/products/update/${id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const res = await multipartApi.post(`/products/update/${id}`, formData);
       {
         res.status &&
           toast({

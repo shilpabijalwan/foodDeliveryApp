@@ -1,55 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import AdminNavbar from "../NavBar/AdminNavBar";
 import {
   Box,
   Button,
+  Checkbox,
+  CheckboxGroup,
   Input,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalOverlay,
+  ScaleFade,
   Select,
   Stack,
   Text,
   VStack,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 
 import { useForm } from "react-hook-form";
-import axios from "axios";
+
 import { useSelector } from "react-redux";
+import { FetchUserCategory } from "../../Services/CategoryService";
+import { multipartApi } from "../../axiosApi";
 
 function AddProducts() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+
     watch,
     reset,
   } = useForm();
 
+  useEffect(() => {
+    FetchUserCategory();
+  });
   const stroeCategory = useSelector((data) => {
     return data.CategorySlice.CategoryData;
   });
   // console.log(stroeCategory);
+
   const handleAdd = async (data) => {
-    // console.log(data);
+    console.log(data);
     const formData = {
       name: data.name,
       price: data.price,
       image: data.image[0],
       category: data.catagoryselect,
     };
-    console.log(data.catagoryselect, data.image[0]);
+    // console.log(data.catagoryselect, data.image[0]);
 
     try {
-      const response = await axios.post(
-        "http://192.168.1.18:8000/api/products/add",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await multipartApi.post("/products/add", formData);
       {
         response.status &&
           toast({
@@ -62,26 +69,25 @@ function AddProducts() {
     } catch (error) {
       console.log(error);
 
-      // toast({
-      //   title: "somthing went wrong while adding a new product" + error.message,
-      //   status: "error",
-      //   duration: 6000,
-      // });
+      toast({
+        title: "somthing went wrong while adding a new product" + error.message,
+        status: "error",
+        duration: 6000,
+      });
     }
 
     reset();
   };
   return (
     <>
-      <AdminNavbar />
       <Box
         w={"100%"}
         // border="1px solid blue"
       >
         <VStack
-          w={{ base: "70%", sm: "70%", md: "40%" }}
+          w={{ base: "70%", sm: "70%", md: "50%" }}
           m={"auto"}
-          h={"600px"}
+          // h={"600px"}
           // border={"1px solid blue"}
           style={{
             boxShadow:
@@ -89,9 +95,9 @@ function AddProducts() {
           }}
           my={50}>
           <Box
-            px={100}
+            px={10}
             py={30}
-            my={10}
+            my={5}
             // border="1px solid blue"
             fontSize="4xl"
             fontFamily={"cursive"}
@@ -128,7 +134,7 @@ function AddProducts() {
                 // onChange={(e) => console.log(e.target.value)}
               />
 
-              <Select
+              {/* <Select
                 placeholder="Choose product category"
                 bg="tomato"
                 borderColor="tomato"
@@ -141,13 +147,52 @@ function AddProducts() {
                     {ele.name}
                   </option>
                 ))}
-              </Select>
+              </Select> */}
+              <Button onClick={onOpen}>Select Categories</Button>
+              <Modal
+                isCentered
+                onClose={onClose}
+                isOpen={isOpen}
+                motionPreset="slideInBottom">
+                <ModalOverlay />
+                <ModalContent>
+                  <CheckboxGroup colorScheme="green">
+                    <Box
+                      mt="4"
+                      rounded="md"
+                      shadow="md"
+                      display={"grid"}
+                      gridTemplateColumns={"repeat(3,1fr)"}
+                      py={10}
+                      gap={6}>
+                      {stroeCategory?.map((ele) => (
+                        <Box px={2} key={ele.id}>
+                          <Checkbox
+                            id={ele.id}
+                            value={`${ele.id}`}
+                            key={ele.id}
+                            size={"lg"}
+                            {...register("catagoryselect", { required: true })}>
+                            {ele.name}
+                          </Checkbox>
+                        </Box>
+                      ))}
+                    </Box>
+                  </CheckboxGroup>
+                  <ModalFooter>
+                    <Button colorScheme="blue" mr={3} onClick={onClose}>
+                      Close
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
               <Button
                 type="submit"
                 colorScheme="teal"
                 variant="outline"
                 fontWeight={"bold"}
-                fontSize={22}>
+                fontSize={22}
+                mb={16}>
                 Add
               </Button>
             </Stack>

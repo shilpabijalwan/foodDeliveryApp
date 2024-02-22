@@ -17,8 +17,7 @@ const CategorySlice = createSlice({
       state.isLoading = true;
     },
     CategoryIsError: (state, action) => {
-      state.isLoading = false;
-      state.isError = action.payload;
+      // state.isError = action.payload;
     },
   },
 });
