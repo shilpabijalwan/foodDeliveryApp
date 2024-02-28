@@ -19,7 +19,6 @@ function AllProducts() {
 
   useEffect(() => {
     dispatch(ProductILoading());
-    fetchAdminProducts();
   }, []);
 
   return isLoading ? (

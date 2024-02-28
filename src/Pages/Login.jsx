@@ -32,11 +32,11 @@ function Login() {
   } = useForm();
 
   const handleLogin = async (data) => {
-    console.log("working");
-    console.log(data);
+    // console.log("working");
+    // console.log(data);
     try {
       const response = await apiAxios.post("/users/login", data);
-      // console.log(response.data.token);
+      // console.log(response.data)
       localStorage.setItem("token", JSON.stringify(response.data.token));
       // dispatch(userData(response.data.token));
 
@@ -47,15 +47,16 @@ function Login() {
           duration: 3000,
         });
       setTimeout(() => {
-        response && navigate("/");
-      }, 2000);
+        response.data.token && navigate("/");
+      }, 1000);
     } catch (error) {
-      // console.log(error.response.data.error);
-      toast({
-        title: error.response.data.error,
-        status: "error",
-        duration: 3000,
-      });
+      console.log(error);
+      error &&
+        toast({
+          title: error.response.data.error,
+          status: "error",
+          duration: 3000,
+        });
     }
     // reset();
   };

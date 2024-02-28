@@ -45,7 +45,7 @@ function AdminLogin() {
           duration: 3000,
         });
       setTimeout(() => {
-        response && navigate("/admin");
+        response && navigate("/");
       }, 1000);
     } catch (error) {
       console.log(error);

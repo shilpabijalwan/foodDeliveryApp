@@ -26,6 +26,7 @@ import FirstPage from "../firstPage/FirstPage";
 import Loader from "../Components/Spinner/Spinner";
 import { Box, Text } from "@chakra-ui/react";
 import { FetchUserCategory } from "../Services/CategoryService";
+import SortProductList from "../AdiminPannel/SortProductList";
 
 export function ErrorBoundary() {
   let error = useRouteError();
@@ -39,7 +40,7 @@ export function ErrorBoundary() {
       alignContent={"center"}
       alignItems={"center"}>
       <Text fontSize={40} color={"green"}>
-        Rediracting.....
+        Redirecting.....
       </Text>
     </Box>
   );
@@ -90,6 +91,7 @@ export const routerAdmin = createBrowserRouter(
 
         <Route path="adminlogin" element={<AdminLogin />} />
         <Route path="adminsignup" element={<AdminSignup />} />
+        <Route path="category/category_id/:id" element={<SortProductList />} />
       </Route>
     </>
   )

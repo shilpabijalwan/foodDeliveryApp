@@ -51,9 +51,10 @@ function ProductCard({ category, price, name, image, id }) {
     }
   };
 
-  useEffect(() => {
-    FetchUserCategory();
-  });
+  // useEffect(() => {
+  //   FetchUserCategory();
+  // }, []);
+
   return (
     <Card maxW="sm">
       <CardBody>

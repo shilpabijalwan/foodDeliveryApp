@@ -23,30 +23,28 @@ import SerachBar from "../SerachBar/SerachBar";
 import axios from "axios";
 import { BASE_URL } from "../../../../ipData";
 import { axiosToken } from "../../axiosApi";
+import { connect } from "react-redux";
 
-const Links = [
-  { title: "", link: "/", icon: "" },
-  {
-    title: "Cart",
-    link: "/cart",
-    icon: <CiShoppingCart size={24} />,
-    count: "",
-  },
-];
+function NavBar(props) {
+  // console.log(props.cartItems.length);
+  const Links = [
+    {
+      title: "Cart",
+      link: "/cart",
+      icon: <CiShoppingCart size={40} />,
+      count: props.cartItems.length,
+    },
+  ];
 
-function NavBar() {
   const toast = useToast();
-  const LoginUser = JSON.parse(localStorage.getItem("userDetails")) || "";
+  const userdata = JSON.parse(localStorage.getItem("details")) || "";
   const token = JSON.parse(localStorage.getItem("token")) || null;
 
   const handleLogOut = async () => {
     try {
       await axiosToken.post(`/user/logout`).then((response) => {
-        console.log(response);
-        response
-          ? localStorage.removeItem("token") &&
-            localStorage.removeItem("userDetails")
-          : "";
+        response && localStorage.removeItem("token");
+
         response &&
           toast({
             title: response.data,
@@ -100,20 +98,27 @@ function NavBar() {
                   ? { color: "red", fontSize: 18, fontWeight: 600 }
                   : { fontSize: 18, fontWeight: 600 };
               }}>
-              <Box display={"flex"}>
-                <Box>
-                  {ele.icon}
-                  <Text
-                    position={"absolute"}
-                    top={5}
-                    ml={4}
-                    fontSize={18}
-                    fontWeight={400}>
+              {/* <Box display={"flex"}> */}
+              <Box>
+                {ele.icon}
+                <Box
+                  bgColor={"#F2F4F4"}
+                  border={"1px solid #E5E8E8"}
+                  position={"absolute"}
+                  top={3}
+                  ml={6}
+                  h={6}
+                  w={6}
+                  pb={1}
+                  borderRadius={15}
+                  textAlign={"center"}>
+                  <Text fontSize={14} fontWeight={600} color={"green"}>
                     {ele.count}
                   </Text>
                 </Box>
-                {ele.title}
               </Box>
+              {/* {ele.title} */}
+              {/* </Box> */}
             </NavLink>
           </Box>
         ))}
@@ -125,7 +130,7 @@ function NavBar() {
             <MenuGroup>
               {token ? (
                 <MenuItem fontSize={18} fontWeight={"bold"} color={"#8A56D5"}>
-                  Hello {LoginUser?.name}
+                  Hello {userdata}
                 </MenuItem>
               ) : (
                 <MenuItem fontSize={18} fontWeight={"bold"} w={"100%"}>
@@ -166,5 +171,7 @@ function NavBar() {
     </HStack>
   );
 }
-
-export default NavBar;
+const mapStateToProps = (state) => ({
+  cartItems: state.CartProductSlice.Cartproduct,
+});
+export default connect(mapStateToProps)(NavBar);

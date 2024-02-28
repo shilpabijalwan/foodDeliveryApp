@@ -95,8 +95,6 @@ function UpdateProduct() {
 
   return (
     <Box>
-      <AdminNavbar />
-
       <Box
         w={"100%"}
         // border="1px solid blue"

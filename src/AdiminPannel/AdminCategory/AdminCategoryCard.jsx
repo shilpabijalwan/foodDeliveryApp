@@ -18,6 +18,7 @@ import {
   List,
   useDisclosure,
   useToast,
+  HStack,
 } from "@chakra-ui/react";
 
 import { Link } from "react-router-dom";
@@ -25,6 +26,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { FetchUserCategory } from "../../Services/CategoryService";
 import { apiAxios } from "../../axiosApi";
 import { useSelector } from "react-redux";
+import { fetchAdminProducts } from "../../Services/ProductServices";
 
 function AdminCategoryCard({
   image,
@@ -45,7 +47,7 @@ function AdminCategoryCard({
 
   const { CategoryData, isLoading } = categoryStore;
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id, e) => {
     onClose();
     try {
       await apiAxios.delete(`categories/delete/${id}`).then((response) => {
@@ -61,6 +63,15 @@ function AdminCategoryCard({
       console.log(error);
     }
   };
+  const handleEdit = (e) => {
+    console.log(e);
+    // e.stopPropagation();
+    e.preventDefault();
+  };
+  const handleDel = (e) => {
+    e.preventDefault();
+    onOpen();
+  };
   return (
     <>
       <Draggable draggableId={`dragid ${id}`} key={id} index={index}>
@@ -71,53 +82,61 @@ function AdminCategoryCard({
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}>
-            <ListItem
-              px={6}
-              display={"flex"}
-              w={"100%"}
-              borderRadius={40}
-              justifyContent={"space-around"}
-              gap={5}
-              my={10}
-              style={{
-                boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px",
-              }}>
-              <Image
-                src={image}
-                alt="img"
-                h={120}
-                // mt={15}
-                my={5}
-                border={"1px solid wheat"}
-                borderRadius={150}
-                w={120}
+            <Link to={`category_id/${id}`}>
+              <ListItem
+                px={6}
+                display={"flex"}
+                w={"100%"}
+                borderRadius={40}
+                justifyContent={"space-around"}
+                gap={5}
+                my={10}
                 style={{
-                  boxShadow:
-                    "rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px",
-                }}
-              />
-              <Text
-                w={"60%"}
-                fontSize={26}
-                fontWeight={"bold"}
-                mt={14}
-                color="#273746">
-                {name}
-              </Text>
-              <Button mt={16} colorScheme="green" variant="outline">
-                Edit
-              </Button>
-              <Button
-                mt={16}
-                colorScheme="red"
-                variant="outline"
-                onClick={onOpen}>
-                Delete
-              </Button>
-            </ListItem>
+                  boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px",
+                }}>
+                <HStack w={"70%"} gap={20}>
+                  <Image
+                    src={image}
+                    alt="img"
+                    h={120}
+                    // mt={15}
+                    my={5}
+                    border={"1px solid wheat"}
+                    borderRadius={150}
+                    w={120}
+                    style={{
+                      boxShadow:
+                        "rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px",
+                    }}
+                  />
+                  <Text
+                    w={"60%"}
+                    fontSize={26}
+                    fontWeight={"bold"}
+                    color="#273746">
+                    {name}
+                  </Text>
+                </HStack>
+                <HStack w={"20%"} m={"auto"} justifyContent={"space-around"}>
+                  <Button
+                    colorScheme="green"
+                    variant="outline"
+                    onClick={(e) => handleEdit(e)}>
+                    Edit
+                  </Button>
+                  <Button
+                    colorScheme="red"
+                    variant="outline"
+                    onClick={(e) => handleDel(e)}>
+                    Delete
+                  </Button>
+                </HStack>
+              </ListItem>
+            </Link>
           </Box>
         )}
       </Draggable>
+
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}

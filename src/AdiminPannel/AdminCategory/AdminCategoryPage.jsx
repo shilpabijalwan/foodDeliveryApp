@@ -26,7 +26,7 @@ import Loader from "../../Components/Spinner/Spinner";
 
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import AdminCategoryCard from "./AdminCategoryCard";
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 
 function AdminCategoryPage() {
   const [newCategoryList, setNewCategoryList] = useState(null);

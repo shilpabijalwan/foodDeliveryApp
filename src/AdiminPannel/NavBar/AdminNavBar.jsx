@@ -1,4 +1,4 @@
-import { Box, HStack, Text } from "@chakra-ui/react";
+import { Box, Button, HStack, Text } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
@@ -6,6 +6,8 @@ import axios from "axios";
 
 import { BASE_URL } from "../../../../ipData";
 import Loader from "../../Components/Spinner/Spinner";
+import { apiAxios } from "../../axiosApi";
+import { fetchAdmin } from "../../Services/UserService";
 
 const Links = [
   { title: "Products", link: "/", icon: "" },
@@ -20,37 +22,32 @@ const Links = [
 
 function AdminNavbar() {
   const token = JSON.parse(localStorage.getItem("token")) || null;
-  const AdminDetails = JSON.parse(localStorage.getItem("AdminDetails")) || "";
+  const AdminDetails = JSON.parse(localStorage.getItem("details")) || "";
+  console.log(AdminDetails);
 
   useEffect(() => {
-    token &&
-      (async () => {
-        try {
-          await axios
-            .get(`${BASE_URL}/admin`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            })
-            .then((response) => {
-              // console.log(response);
-              localStorage.setItem(
-                "AdminDetails",
-                JSON.stringify(response.data)
-              );
-            });
-        } catch (error) {
-          console.log(error);
-        }
-      })();
+    // token &&
+    //   (async () => {
+    //     try {
+    //       await apiAxios.get(`/admin`).then((response) => {
+    //         // console.log(response);
+    //         localStorage.setItem("AdminDetails", JSON.stringify(response.data));
+    //       });
+    //     } catch (error) {
+    //       console.log(error);
+    //     }
+    //   })();
+    fetchAdmin();
   }, []);
 
   return (
     <HStack
+      position={"sticky"}
+      top={0}
+      zIndex={4}
       bg={"#D6EAF8"}
       w={"100%"}
       py={2}
-      zIndex={5}
       justifyContent={{ base: "space-between", sm: "space-around" }}
       style={{
         boxShadow:
@@ -86,7 +83,14 @@ function AdminNavbar() {
             </NavLink>
           </Box>
         ))}
-        <Text>{AdminDetails.name}</Text>
+        <Button
+          isDisabled
+          fontSize={20}
+          colorScheme={"purple"}
+          variant={"outline"}
+          fontWeight={"bold"}>
+          Hii {AdminDetails}
+        </Button>
       </HStack>
     </HStack>
   );

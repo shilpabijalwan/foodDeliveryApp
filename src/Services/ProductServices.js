@@ -15,3 +15,19 @@ export const fetchAdminProducts = async () => {
     store.dispatch(ProductIsError(error));
   }
 };
+
+export const SortProductId = async (ids, id) => {
+  // console.log(ids);
+  store.dispatch(ProductIsLoading());
+  try {
+    await apiAxios
+      .post("products/sortProducts", { products: ids, category_id: id })
+      .then((response) => {
+        // console.log(response);
+        fetchAdminProducts();
+      });
+  } catch (error) {
+    // console.log(error);
+    // store.dispatch(ProductIsError(error));
+  }
+};

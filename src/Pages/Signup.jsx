@@ -13,6 +13,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Navigate, useNavigate } from "react-router-dom";
+import { apiAxios, multipartApi } from "../axiosApi";
 
 function AdminSignup() {
   const toast = useToast();
@@ -35,12 +36,10 @@ function AdminSignup() {
 
   const handleLogin = async (data) => {
     console.log(data);
-    // console.log("working");
-    // console.log(inputFieldValues);
 
     try {
-      await axios
-        .post("http://192.168.1.22:8000/api/users/register", data, {
+      await apiAxios
+        .post("/users/register", data, {
           headers: {
             "Content-Type": "application/json",
           },

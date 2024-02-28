@@ -39,7 +39,7 @@ function AddProducts() {
 
   useEffect(() => {
     FetchUserCategory();
-  });
+  }, []);
   const stroeCategory = useSelector((data) => {
     return data.CategorySlice.CategoryData;
   });
