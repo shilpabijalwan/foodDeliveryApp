@@ -37,6 +37,9 @@ const CartProductSlice = createSlice({
       );
       state.Cartproduct = Removeitem;
     },
+    resetCart: (state, action) => {
+      state.Cartproduct = null;
+    },
   },
 });
 
@@ -47,4 +50,5 @@ export const {
   QuantityDecrease,
   setProductQuantity,
   RemoveCartItem,
+  resetCart,
 } = CartProductSlice.actions;

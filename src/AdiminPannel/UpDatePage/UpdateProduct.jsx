@@ -4,12 +4,19 @@ import AdminNavbar from "../NavBar/AdminNavBar";
 import {
   Box,
   Button,
+  Checkbox,
+  CheckboxGroup,
   Image,
   Input,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalOverlay,
   Select,
   Stack,
   Text,
   VStack,
+  useDisclosure,
   useStatStyles,
   useToast,
 } from "@chakra-ui/react";
@@ -22,6 +29,7 @@ import { apiAxios, multipartApi } from "../../axiosApi";
 
 function UpdateProduct() {
   const [previmg, setPrevimg] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   //   console.log(previmg);
   const { register, handleSubmit, watch } = useForm();
   let imageField = watch("image");
@@ -75,7 +83,7 @@ function UpdateProduct() {
       category: data.catagoryselect,
     };
 
-    console.log(formData);
+    // console.log(formData);
 
     try {
       const res = await multipartApi.post(`/products/update/${id}`, formData);
@@ -87,7 +95,7 @@ function UpdateProduct() {
             duration: 3000,
           });
       }
-      console.log(res);
+      // console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -172,23 +180,44 @@ function UpdateProduct() {
                   border={"1px solid gray"}
                 />
               )}
-              <Select
-                placeholder="Choose product category"
-                bg="tomato"
-                borderColor="tomato"
-                focusBorderColor="tomato"
-                fontSize={18}
-                fontWeight={"bold"}
-                {...register("catagoryselect", { required: true })}>
-                {stroeCategory?.map((ele) => (
-                  <option
-                    value={ele.id}
-                    selected={productdata.category == ele.id}
-                    key={ele.id}>
-                    {ele.name}
-                  </option>
-                ))}
-              </Select>
+              <Button onClick={onOpen}>Select Categories</Button>
+              <Modal
+                isCentered
+                onClose={onClose}
+                isOpen={isOpen}
+                motionPreset="slideInBottom">
+                <ModalOverlay />
+                <ModalContent>
+                  <CheckboxGroup colorScheme="green">
+                    <Box
+                      mt="4"
+                      rounded="md"
+                      shadow="md"
+                      display={"grid"}
+                      gridTemplateColumns={"repeat(3,1fr)"}
+                      py={10}
+                      gap={6}>
+                      {stroeCategory?.map((ele) => (
+                        <Box px={2} key={ele.id}>
+                          <Checkbox
+                            id={ele.id}
+                            value={`${ele.id}`}
+                            key={ele.id}
+                            size={"lg"}
+                            {...register("catagoryselect", { required: true })}>
+                            {ele.name}
+                          </Checkbox>
+                        </Box>
+                      ))}
+                    </Box>
+                  </CheckboxGroup>
+                  <ModalFooter>
+                    <Button colorScheme="blue" mr={3} onClick={onClose}>
+                      Close
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
               <Button
                 type="submit"
                 colorScheme="teal"

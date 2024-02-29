@@ -13,20 +13,9 @@ function App() {
     return data.AuthSlice.userDetails;
   });
 
-  const [isReady, setIsReady] = useState(false);
-
   useEffect(() => {
     fetchUser();
-
-    return () => {};
-  }, []);
-
-  useEffect(() => {
-    // FetchUserCategory();
-    console.log("isReady", isReady);
-    setIsReady(true);
-    console.log(userData);
-  }, [userData]);
+  }, [fetchUser, userData]);
 
   return (
     <>

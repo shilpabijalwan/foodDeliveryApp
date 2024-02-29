@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Divider,
-  Heading,
-  Image,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Image, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 function CategoryCard({ image, name, id }) {

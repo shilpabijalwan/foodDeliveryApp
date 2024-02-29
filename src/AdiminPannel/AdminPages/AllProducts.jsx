@@ -1,14 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  GetProducts,
-  ProductILoading,
-  ProductIsError,
-} from "../../redux/Slices/Product.slice";
+
 import { Box } from "@chakra-ui/react";
 import ProductCard from "../ProductCard/ProductCard";
 import Loader from "../../Components/Spinner/Spinner";
-import { fetchAdminProducts } from "../../Services/ProductServices";
 
 function AllProducts() {
   const dispatch = useDispatch();
@@ -16,10 +11,7 @@ function AllProducts() {
     return data.ProductSlice;
   });
   const { ProductData, isLoading, isError } = storeProduct;
-
-  useEffect(() => {
-    dispatch(ProductILoading());
-  }, []);
+  // console.log(isLoading);
 
   return isLoading ? (
     <Loader />

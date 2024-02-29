@@ -46,7 +46,7 @@ function AddProducts() {
   // console.log(stroeCategory);
 
   const handleAdd = async (data) => {
-    console.log(data);
+    // console.log(data);
     const formData = {
       name: data.name,
       price: data.price,

@@ -13,7 +13,7 @@ const ProductSlice = createSlice({
       state.isLoading = false;
       state.ProductData = action.payload;
     },
-    ProductILoading: (state, action) => {
+    ProductIsLoading: (state, action) => {
       state.isLoading = true;
     },
     ProductIsError: (state, action) => {
@@ -24,5 +24,5 @@ const ProductSlice = createSlice({
 });
 
 export default ProductSlice.reducer;
-export const { GetProducts, ProductILoading, ProductIsError } =
+export const { GetProducts, ProductIsLoading, ProductIsError } =
   ProductSlice.actions;

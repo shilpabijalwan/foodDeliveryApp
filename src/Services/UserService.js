@@ -17,7 +17,7 @@ export const fetchUser = async () => {
       .then((response) => {
         // console.log(response);
         store.dispatch(userData(response.data));
-        localStorage.setItem("details", JSON.stringify(response.data.name));
+        localStorage.setItem("details", JSON.stringify(response.data));
       });
   } catch (error) {
     console.log(error);

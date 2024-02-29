@@ -50,7 +50,7 @@ function AdminLogin() {
     } catch (error) {
       console.log(error);
       toast({
-        title: error.response.data.error,
+        title: error?.response.data.error,
         status: "error",
         duration: 3000,
       });

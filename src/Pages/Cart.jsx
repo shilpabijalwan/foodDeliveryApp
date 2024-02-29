@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Card,
@@ -16,17 +16,44 @@ import {
   QuantityDecrease,
   QuantityIncrease,
   RemoveCartItem,
+  resetCart,
 } from "../redux/Slices/CartSlice";
 
 import { DeleteIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
+import { apiAxios } from "../axiosApi";
 
 function Cart() {
+  const userdata = JSON.parse(localStorage.getItem("details")) || "";
+  // console.log(userdata);
   const dispatch = useDispatch();
+  let ProductsTotal;
+
+  const [data, setData] = useState([]);
   const cartData = useSelector((data) => {
     return data.CartProductSlice;
   });
   // console.log(cartData.Cartproduct);
+
+  useEffect(() => {
+    const newData = cartData.Cartproduct?.map((ele) => {
+      return {
+        product_id: ele.id,
+        quantity: ele.quantity,
+      };
+    });
+    // newData.user_id = userdata.id;
+    setData(newData);
+  }, []);
+  // console.log(data);
+
+  useEffect(() => {
+    ProductsTotal = cartData.Cartproduct?.reduce((accumulator, item) => {
+      // console.log(item.price * item.quantity);
+      return (accumulator += item.price * item.quantity);
+    }, 0);
+  }, []);
+
   const handleDecrease = (id) => {
     // console.log(id);
 
@@ -37,15 +64,21 @@ function Cart() {
     dispatch(QuantityIncrease(id));
   };
 
-  const ProductsTotal = cartData.Cartproduct.reduce((accumulator, item) => {
-    // console.log(item.price * item.quantity);
-    return (accumulator += item.price * item.quantity);
-  }, 0);
-  // console.log(ProductsTotal);
   const handleRemove = (id) => {
     // console.log(id);
     dispatch(RemoveCartItem(id));
   };
+  const handleOrderPlaced = async () => {
+    // console.log("okkk");
+    try {
+      const res = await apiAxios.post("orders/createOrderWithItems", data);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+      // dispatch(resetCart());
+    }
+  };
+
   return (
     <Box w={"80%"} m={"auto"} mt={10}>
       {cartData.Cartproduct?.map((ele) => {
@@ -136,8 +169,20 @@ function Cart() {
           boxShadow:
             "rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px",
         }}>
-        {cartData.Cartproduct.length ? (
-          <Heading>Total Cart Value:- {ProductsTotal}</Heading>
+        {cartData.Cartproduct?.length ? (
+          <>
+            <Heading>Total Cart Value:- {ProductsTotal}</Heading>
+            <br />
+            <br />
+
+            <Button
+              colorScheme="teal"
+              variant={"outline"}
+              size={"lg"}
+              onClick={handleOrderPlaced}>
+              Place Order
+            </Button>
+          </>
         ) : (
           <Box>
             <Heading mb={10} color={"green"}>

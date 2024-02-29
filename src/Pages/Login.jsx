@@ -36,7 +36,7 @@ function Login() {
     // console.log(data);
     try {
       const response = await apiAxios.post("/users/login", data);
-      // console.log(response.data)
+
       localStorage.setItem("token", JSON.stringify(response.data.token));
       // dispatch(userData(response.data.token));
 

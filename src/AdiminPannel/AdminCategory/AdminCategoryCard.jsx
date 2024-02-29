@@ -22,20 +22,17 @@ import {
 } from "@chakra-ui/react";
 
 import { Link } from "react-router-dom";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { Draggable } from "react-beautiful-dnd";
 import { FetchUserCategory } from "../../Services/CategoryService";
 import { apiAxios } from "../../axiosApi";
 import { useSelector } from "react-redux";
-import { fetchAdminProducts } from "../../Services/ProductServices";
 
 function AdminCategoryCard({
   image,
   name,
   id,
-  Draggableprop,
-  ref,
+
   index,
-  draggableHandleProp,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
@@ -47,7 +44,7 @@ function AdminCategoryCard({
 
   const { CategoryData, isLoading } = categoryStore;
 
-  const handleDelete = async (id, e) => {
+  const handleDelete = async (id) => {
     onClose();
     try {
       await apiAxios.delete(`categories/delete/${id}`).then((response) => {
@@ -64,7 +61,7 @@ function AdminCategoryCard({
     }
   };
   const handleEdit = (e) => {
-    console.log(e);
+    // console.log(e);
     // e.stopPropagation();
     e.preventDefault();
   };

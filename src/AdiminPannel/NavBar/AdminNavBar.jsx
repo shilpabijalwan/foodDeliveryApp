@@ -23,20 +23,9 @@ const Links = [
 function AdminNavbar() {
   const token = JSON.parse(localStorage.getItem("token")) || null;
   const AdminDetails = JSON.parse(localStorage.getItem("details")) || "";
-  console.log(AdminDetails);
+  // console.log(AdminDetails);
 
   useEffect(() => {
-    // token &&
-    //   (async () => {
-    //     try {
-    //       await apiAxios.get(`/admin`).then((response) => {
-    //         // console.log(response);
-    //         localStorage.setItem("AdminDetails", JSON.stringify(response.data));
-    //       });
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //   })();
     fetchAdmin();
   }, []);
 
@@ -89,7 +78,7 @@ function AdminNavbar() {
           colorScheme={"purple"}
           variant={"outline"}
           fontWeight={"bold"}>
-          Hii {AdminDetails}
+          Hii {AdminDetails.name}
         </Button>
       </HStack>
     </HStack>

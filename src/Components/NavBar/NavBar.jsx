@@ -32,7 +32,7 @@ function NavBar(props) {
       title: "Cart",
       link: "/cart",
       icon: <CiShoppingCart size={40} />,
-      count: props.cartItems.length,
+      count: props.cartItems?.length,
     },
   ];
 
@@ -47,7 +47,7 @@ function NavBar(props) {
 
         response &&
           toast({
-            title: response.data,
+            title: response?.data,
             status: "success",
             duration: 3000,
           });
@@ -130,7 +130,7 @@ function NavBar(props) {
             <MenuGroup>
               {token ? (
                 <MenuItem fontSize={18} fontWeight={"bold"} color={"#8A56D5"}>
-                  Hello {userdata}
+                  Hello {userdata.name}
                 </MenuItem>
               ) : (
                 <MenuItem fontSize={18} fontWeight={"bold"} w={"100%"}>
