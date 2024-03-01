@@ -10,6 +10,7 @@ import { apiAxios } from "../../axiosApi";
 import { fetchAdmin } from "../../Services/UserService";
 
 const Links = [
+  { title: "OrdersDetails", link: "/order", icon: "" },
   { title: "Products", link: "/", icon: "" },
 
   { title: "Categories", link: "/category", icon: "" },

@@ -27,6 +27,7 @@ import Loader from "../Components/Spinner/Spinner";
 import { Box, Text } from "@chakra-ui/react";
 import { FetchUserCategory } from "../Services/CategoryService";
 import SortProductList from "../AdiminPannel/SortProductList";
+import AllOrderDetails from "../AdiminPannel/AllOrderDetails";
 
 export function ErrorBoundary() {
   let error = useRouteError();
@@ -84,6 +85,7 @@ export const routerAdmin = createBrowserRouter(
             // </PrivateRoute>
           }
         />
+        <Route path="order" element={<AllOrderDetails />} />
         <Route path="add" element={<AddProducts />} />
         <Route path="add-category" element={<AddCategory />} />
         <Route path="category" element={<AdminCategoryPage />} />

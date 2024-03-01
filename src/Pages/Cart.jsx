@@ -21,7 +21,7 @@ import {
 
 import { DeleteIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
-import { apiAxios } from "../axiosApi";
+import { apiAxios, axiosToken } from "../axiosApi";
 
 function Cart() {
   const userdata = JSON.parse(localStorage.getItem("details")) || "";
@@ -47,12 +47,10 @@ function Cart() {
   }, []);
   // console.log(data);
 
-  useEffect(() => {
-    ProductsTotal = cartData.Cartproduct?.reduce((accumulator, item) => {
-      // console.log(item.price * item.quantity);
-      return (accumulator += item.price * item.quantity);
-    }, 0);
-  }, []);
+  ProductsTotal = cartData.Cartproduct?.reduce((accumulator, item) => {
+    // console.log(item.price * item.quantity);
+    return (accumulator += item.price * item.quantity);
+  }, 0);
 
   const handleDecrease = (id) => {
     // console.log(id);
@@ -71,7 +69,9 @@ function Cart() {
   const handleOrderPlaced = async () => {
     // console.log("okkk");
     try {
-      const res = await apiAxios.post("orders/createOrderWithItems", data);
+      const res = await axiosToken.post("orders/createOrderWithItems", {
+        order: data,
+      });
       console.log(res);
     } catch (error) {
       console.log(error);
